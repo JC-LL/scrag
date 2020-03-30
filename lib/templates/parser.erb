@@ -1,0 +1,73 @@
+# coding: utf-8
+require_relative 'generic_parser'
+require_relative 'ast'
+require_relative 'lexer'
+
+module <%=project_name.capitalize%>
+
+  class Parser < GenericParser
+
+    attr_accessor :options
+    attr_accessor :lexer,:tokens
+    attr_accessor :basename,:filename
+
+    def initialize options={}
+      @options=options
+    end
+
+    def lex filename
+      unless File.exists?(filename)
+        raise "ERROR : cannot find file '#{filename}'"
+      end
+      begin
+        str=IO.read(filename).downcase
+        tokens=Lexer.new.tokenize(str)
+        tokens=tokens.select{|t| t.class==Token} # filters [nil,nil,nil]
+        tokens.reject!{|tok| tok.is_a? [:comment,:newline,:space]}
+        return tokens
+      rescue Exception=>e
+        unless options[:mute]
+          puts e.backtrace
+          puts e
+        end
+        raise "an error occured during LEXICAL analysis. Sorry. Aborting."
+      end
+    end
+
+    def parse filename
+      begin
+        @tokens=lex(filename)
+        puts "......empty file !" if tokens.size==0
+        root=Root.new([])
+        while @tokens.any?
+          case showNext.kind
+          when :comment
+            root << acceptIt
+          # etc...
+          else
+            raise "got #{showNext}"
+          end
+        end
+      rescue Exception => e
+        unless options[:mute]
+          puts e.backtrace
+          puts e
+        end
+        raise
+      end
+      root
+    end
+
+    def parse_thing
+      expect :thing
+      expect :ident
+      while showNext.is_a?(:comma)
+        acceptIt
+        expect :ident
+      end
+      expect :semicolon
+    end
+
+    # ....etc...
+  end
+end

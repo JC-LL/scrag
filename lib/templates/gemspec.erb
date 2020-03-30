@@ -1,0 +1,33 @@
+require_relative "./lib/<%=project_name%>/version"
+
+Gem::Specification.new do |s|
+  s.name        = '<%=project_name%>'
+  s.version     = <%project_name.capitalize%>::VERSION
+  s.date        = Time.now.strftime("%Y-%m-%d")
+  s.summary     = "<%= project_name%> DSL compiler"
+  s.description = "<%= project_name%> DSL compiler"
+  s.authors     = ["Jean-Christophe Le Lann"]
+  s.email       = 'lelannje@ensta-bretagne.fr'
+  s.files       = [
+                    "lib/<%=project_name%>/runner.rb",
+                    "lib/<%=project_name%>/compiler.rb",
+                    "lib/<%=project_name%>/ast.rb",
+                    "lib/<%=project_name%>/code.rb",
+                    "lib/<%=project_name%>/generic_lexer.rb",
+                    "lib/<%=project_name%>/generic_parser.rb",
+                    "lib/<%=project_name%>/lexer.rb",
+                    "lib/<%=project_name%>/parser.rb",
+                    "lib/<%=project_name%>/pretty_printer.rb",
+                    "lib/<%=project_name%>/token.rb",
+                    "lib/<%=project_name%>/version.rb",
+                    "lib/<%=project_name%>.rb"
+                ]
+
+  s.executables << '<%=project_name%>'
+  s.homepage    = 'https://github.com/JC-LL/<%=project_name%>'
+  s.license     = 'MIT'
+  s.post_install_message = "Thanks for installing ! Homepage :https://github.com/JC-LL/<%=project_name%>"
+  s.required_ruby_version = '>= 2.0.0'
+  s.add_runtime_dependency 'colorize', '0.8.1'
+
+end
