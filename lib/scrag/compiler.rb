@@ -1,5 +1,6 @@
 require 'erb'
 require_relative 'code'
+require 'fileutils'
 
 module Scrag
 
@@ -71,9 +72,14 @@ module Scrag
       if Dir.exists?(dir)
         if options[:force]
           puts "WARNING : project already exists !"
-          puts "Are you sure you want to force generation ? files will be lost !"
-          key=$stdin.chomp
-          puts key
+          puts "Are you sure you want to force generation (Y) ? files will be lost !"
+          key=$stdin.gets.chomp
+          if key=='Y'
+            puts "proceeding"
+          else
+            puts "aborting"
+            abort
+          end
         else
           puts "Scrag ERROR : project '#{project_name}' already exists. Type -v for options."
           abort
@@ -82,6 +88,7 @@ module Scrag
     end
 
     def create_stuff dir
+      FileUtils.rm_rf dir
       Dir.mkdir dir
       Dir.chdir dir
       rel_dir=dir.split('/')[1..-1].join('/')
