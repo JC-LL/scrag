@@ -24,7 +24,6 @@ module Scrag
                                   :ast,
                                   :code,
                                   :compiler,
-                                  :exec,
                                   :generic_lexer,
                                   :generic_parser,
                                   :lexer,
